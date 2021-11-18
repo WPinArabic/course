@@ -1,0 +1,14 @@
+add_action( 'init', 'wpb_update_slug' );
+ 
+function wpb_update_slug() { 
+global $wpdb;
+$result = $wpdb->get_results("SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = 'blogger_permalink' ");
+$wpdb->print_error();
+foreach ($result as $row){
+$slug = explode("/",$row->meta_value);
+$slug = explode(".",$slug[3]);
+$wpdb->query("UPDATE $wpdb->posts SET post_name ='$slug[0]' WHERE ID = '$row->post_id' ");
+}
+echo "DONE";
+ 
+} 
